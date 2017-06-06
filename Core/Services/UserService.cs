@@ -10,6 +10,8 @@ namespace Core.Services
         private readonly IUserRepository _userRepository;
         private readonly IEmailValidation _emailValidation;
 
+        public ILogService LogService { get; set; }
+
         public UserService(IUserRepository userRepository, IEmailValidation emailValidation)
         {
             _userRepository = userRepository;
@@ -40,8 +42,14 @@ namespace Core.Services
             if (_emailValidation.isValid(user.Email) == false)
                     throw new ArgumentException("Email is invalid", "email");
 
-            _userRepository.Save(user);
-
+            try
+            {
+                _userRepository.Save(user);
+            }
+            catch (Exception ex)
+            {
+                LogService.LogError(ex);
+            }
         }
     }
 }

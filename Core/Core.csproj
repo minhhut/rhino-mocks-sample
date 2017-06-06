@@ -45,6 +45,7 @@
     <Compile Include="Repositories\IUserRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
     <Compile Include="Services\EmailValidation.cs" />
+    <Compile Include="Services\ILogService.cs" />
     <Compile Include="Services\IUserService.cs" />
     <Compile Include="Services\IEmailValidation.cs" />
     <Compile Include="Services\UserService.cs" />
