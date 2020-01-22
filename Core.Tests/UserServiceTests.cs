@@ -2,7 +2,7 @@
 using Core.Repositories;
 using Core.Services;
 using NUnit.Framework;
-using Rhino.Mocks;
+using RhinoMockAdapter;
 using System;
 
 namespace Core.Tests
@@ -61,7 +61,6 @@ namespace Core.Tests
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException), ExpectedMessage = "Email is invalid",  MatchType = MessageMatch.Contains)]
         public void Save_InvalidEmail_ThrowsException()
         {
             var user = new User()
@@ -75,7 +74,7 @@ namespace Core.Tests
 
             var userService = new UserService(null, emailValidation);
 
-            userService.Save(user);
+            Assert.Throws(typeof(ArgumentException),() => userService.Save(user), "Email is invalid");
         }
 
         [Test]
@@ -99,25 +98,24 @@ namespace Core.Tests
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Save_NullUser_ThrowsException()
         {
             var userService = new UserService(null, null);
-            userService.Save(null);
+
+            Assert.Throws(typeof(ArgumentNullException), () => userService.Save(null));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException), ExpectedMessage = "Name is required", MatchType = MessageMatch.Contains)]
         public void Save_NullName_ThrowsException()
         {
             var user = new User();
 
             var userService = new UserService(null, null);
-            userService.Save(user);
+            
+            Assert.Throws(typeof(ArgumentException),() => userService.Save(user), "Name is required");
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException), ExpectedMessage = "Email is required", MatchType = MessageMatch.Contains)]
         public void Save_NullEmail_ThrowsException()
         {
             var user = new User()
@@ -126,7 +124,8 @@ namespace Core.Tests
             };
 
             var userService = new UserService(null, null);
-            userService.Save(user);
+            
+            Assert.Throws(typeof(ArgumentException),() => userService.Save(user), "Email is required");
         }
     }
 }
