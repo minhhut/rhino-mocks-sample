@@ -1,9 +1,11 @@
 ﻿using Core.Domain;
 using Core.Repositories;
 using Core.Services;
+using Moq;
 using NUnit.Framework;
-using RhinoMockAdapter;
 using System;
+using RhinoMocksToMoq;
+using MockRepository = RhinoMocksToMoq.MockRepository;
 
 namespace Core.Tests
 {
@@ -23,8 +25,8 @@ namespace Core.Tests
             var emailValidation = MockRepository.GenerateStub<IEmailValidation>();
             var userRepository = MockRepository.GenerateMock<IUserRepository>();
 
-            emailValidation.Stub(p => p.isValid(Arg<string>.Is.Anything)).Return(true);
-            userRepository.Expect(p => p.Save(Arg<User>.Is.Equal(user)));
+            emailValidation.Stub(p => p.isValid(It.IsAny<string>())).Return(true);
+            userRepository.Expect(p => p.Save(It.Is<User>(u => u.Equals(user))));
 
             var userService = new UserService(userRepository, emailValidation);
 
@@ -48,9 +50,9 @@ namespace Core.Tests
             var userRepository = MockRepository.GenerateStub<IUserRepository>();
             var logService = MockRepository.GenerateMock<ILogService>();
 
-            emailValidation.Stub(p => p.isValid(Arg<string>.Is.Anything)).Return(true);
-            userRepository.Stub(p => p.Save(Arg<User>.Is.Equal(user))).Throw(exception);
-            logService.Expect(p => p.LogError(Arg<Exception>.Is.Equal(exception)));
+            emailValidation.Stub(p => p.isValid(It.IsAny<string>())).Return(true);
+            userRepository.Stub(p => p.Save(It.Is<User>(u => u.Equals(user)))).Throw(exception);
+            logService.Expect(p => p.LogError(It.Is<Exception>(e => e.Equals(exception))));
 
             var userService = new UserService(userRepository, emailValidation);
             userService.LogService = logService;
@@ -70,7 +72,7 @@ namespace Core.Tests
             };
 
             var emailValidation = MockRepository.GenerateStub<IEmailValidation>();
-            emailValidation.Stub(p => p.isValid(Arg<string>.Is.Anything)).Return(false);
+            emailValidation.Stub(p => p.isValid(It.IsAny<string>())).Return(false);
 
             var userService = new UserService(null, emailValidation);
 
