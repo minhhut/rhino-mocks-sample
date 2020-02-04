@@ -1,11 +1,11 @@
 ﻿using Core.Domain;
 using Core.Repositories;
 using Core.Services;
-using Moq;
 using NUnit.Framework;
 using System;
-using RhinoMocksToMoq;
-using MockRepository = RhinoMocksToMoq.MockRepository;
+using Rhino.Mocks;
+using Moq;
+using MockRepository = Rhino.Mocks.MockRepository;
 
 namespace Core.Tests
 {
